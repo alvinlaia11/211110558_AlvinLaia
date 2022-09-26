@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="test.css" media=”screen” />
+    <title>bmi dan menghitung nilai</title>
+</head>
+    <link rel="stylesheet" href="web.css">
+<form class="tempat" name="form" action="javascript:void(0);">
+            <h3>HITUNG NILAI</h3>
+
+			<label> Tugas</label>
+            <br>
+			<input type="text" name="ntgs" id="ntgs">
+            <br>
+
+			<label> UTS </label>
+            <br>
+		    <input type="text" name="nuts">
+            <br>
+
+			<label> UAS </label>
+            <br>
+			<input type="text" name="nuas">
+            <br>
+
+			hasil</label>
+            <br>
+			<label><input type="text" name="nakhir" disabled>
+            <br>
+
+			<label> Huruf</label>
+            <br>
+			<input type="text" name="nhuruf" disabled>
+            <br>
+			<input type="submit" name="hasil" value="hitung" onclick="nilaiakhir()">
+            <br>
+		    <input type="reset" name="reset">
+
+	</table>
+</form>
+    </div>
+<br>
+<br>
+<br>
+<div class="tempat2">
+    <h3>KALKULATOR BMI</h3>
+    <p>Tinggi Badan Anda:</p>
+    <input class="height-input-field" type="text">
+    <p>Berat Badan Anda:</p>
+    <input class="weight-input-field" type="text"><br>
+    <button class="calculate"> Hitung</button>
+    <div>
+        <p><strong>BMI:</strong></p>
+        <h3 class="result"></h3>
+        <br>
+        <p><strong>Kategori:</strong></p>
+        <p class="result-statement"></p>
+    </div>
+</div>
+
+<script src="web.js"></script>
+
+</body>
+</html>
