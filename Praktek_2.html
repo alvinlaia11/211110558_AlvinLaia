@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="Praktek_2.css">
+</head>
+<body class="atas1">
+    <div class="atas"></div>
+
+        <div class="box">
+            <h1>Punny Web</h1>
+            <textarea name="textarea" id="textarea" cols="30" rows="10"></textarea>
+            <div>
+                Jumlah Huruf :
+                <span id="data"></span>
+            </div>    
+
+            
+        </div>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+        </script>
+    </div>
+
+
+    <script>
+        $(document).ready(function(){
+            $("#textarea").keyup(function(){
+                var panjang = $("#textarea").val().length
+                $("#data").html(panjang)
+            })
+        })
+    </script>
+</body>
+</html>
