@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lat1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"/>
+</head>
+<style>
+    body{
+        text-align: center;
+        background-image:linear-gradient(to right, #4747ad, #3b626d, rgb(133, 74, 74), rgb(168, 44, 44));
+    }
+    table{
+        background-color: aliceblue;
+        margin: 10px;
+    }
+    tr{
+        background-color: rgb(212, 212, 182);
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+</style>
+<body>
+    <div class="container mt-5">
+      <h1 class="text-center mb-4" style="color: white;">Punny Web</h1>
+        <table class="table table-striped" id="dataTabel">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>City</th>
+            </tr>
+        </table>
+    </div>
+</body>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer" ></script>
+<script>
+    $(document).ready(function () {
+      let show = function (response) {
+        data = $.parseJSON(response);
+        var trHTML = "";
+        $(function () {
+          $.each(data, function (i, item) {
+            trHTML +=
+              "<tr><td>" +
+              item.id +
+              "</td><td>" +
+              item.name +
+              "</td><td>" +
+              item.username +
+              "</td></td>" +
+              item.email +
+              "</td><td>" +
+              item.email +
+              "</td><td>" +
+              item.address.city +
+              "</td></tr>";
+          });
+          $("#dataTabel").append(trHTML);
+        });
+      };
+
+      let load = function () {
+        let link = "https://jsonplaceholder.typicode.com/users";
+        let xhr;
+        xhr = new XMLHttpRequest();
+        try {
+          xhr = new XMLHttpRequest();
+          if (!xhr) return -1;
+
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              show(xhr.responseText);
+            }
+          };
+
+          xhr.open("GET", link);
+          xhr.send();
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      load();
+    });
+</script>
+
+</html>
