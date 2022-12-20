@@ -1,0 +1,7 @@
+body{
+    background-image:linear-gradient(to right, #4747ad, #3b626d, rgb(133, 74, 74), rgb(168, 44, 44));
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+h4{
+    color: white;
+}

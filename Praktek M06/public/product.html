@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Cardside</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark" style="padding-left: 5.5%;">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-white ml-4" href="/product">Bunny Shop</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/product">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-secondary" href="/about">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container mt-3">
+        <h4>Products</h4>
+        <section class="p-3 row justify-content-center text-center">
+            <div class="card" style="width: 18rem; margin: 5px;">
+                <img src="assets/special.jpeg" class="card-img-top" alt="..." width="150" height="350">
+                <div class="card-body">
+                  <h5 class="card-title">Special Item</h5>
+                  <p class="card-text">🌟🌟🌟🌟🌟</p>
+                  <p class="card-text"><span class="text-decoration-line-through">$5.00</span> $3,21</p>
+                  <a href="/special" class="btn btn-light border-dark">Add to Card</a>
+                </div>
+            </div>
+            <div class="card" style="width: 18rem; margin: 5px;">
+                <img src="assets/popular.png" class="card-img-top" alt="..." width="150" height="350">
+                <div class="card-body">
+                  <h5 class="card-title">Popular Item</h5>
+                  <p class="card-text">🌟🌟🌟🌟🌟</p>
+                  <p class="card-text">$3,21</p>
+                  <a href="/popular" class="btn btn-light border-dark">Add to Card</a>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="footer fixed-bottom py-2 bg-dark text-white text-center">
+        <small>Copyright &copy; Bunny Web 2022</small>
+    </footer> 
+</body>
+</html>
