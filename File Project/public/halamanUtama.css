@@ -1,0 +1,149 @@
+/* 
+@media screen and (min-width: 90px) {
+    .box-img-1 {
+        dis
+    }
+    .img-1 {
+        width: 180px;
+        margin: 10px;
+    }
+}
+   */
+
+/* 
+
+} */
+
+body {
+    background-color: #2d3238;
+}
+
+.box-img-1 {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0% auto;
+    margin-top: 15px;
+    text-align: center;
+    /* text-align: center; */
+    width: 95%;
+}
+
+.row {
+    margin: 10px;
+}
+
+.bg-dark {
+    background-color: rgba(33,37,41,255)!important;
+}
+
+.img-1 {
+    width: 160px;
+    margin: 7px;
+    cursor: pointer;
+
+}
+
+
+.img-logo {
+    width: 110px; 
+    height: 75px;
+    border-radius: 20px;
+    margin-left: 10px ;
+}
+
+.box-card-1 {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px auto;
+    width: 95%;
+    border: 1px solid red;
+    
+}
+
+.card {
+    margin: 7px;
+}
+
+.Teks-1 {
+    color: white;
+    font-size: 20px;
+}
+
+.Teks-2 {
+    color: white;
+    background-color: rgba(33,37,41,255);
+    margin: 12px;
+    padding: 10px;
+    text-align: center;
+}
+
+.Teks-4 {
+    color: white;
+    text-decoration: none;
+    
+}
+
+
+
+.input-group {
+    position: absolute;
+    margin-left: 61%;
+    width: 30%;
+}
+
+
+/* ======================== */
+/* CSS Halaman Product */
+
+.cointaner-2 {
+    display: flex;
+    margin-top: 10px;
+}
+
+.box-3 {
+    width: 770px;
+    margin-top: 20px; 
+    margin-left: 10px;
+    border: 1px solid red;
+}
+
+.box-4 {
+    width: 900px;
+    margin-top: 20px; 
+    margin-left: 10px;
+    border: 1px solid red;
+}
+
+.input-id {
+    display: block;
+    margin-top: 20px; 
+    width: 570px;
+    padding: 15px;
+    background-color: rgba(33,37,41,255);
+}
+
+.Diamond{
+    display: block;
+    justify-content: center;
+    width: 570px;
+    margin-top: 5px ;
+    padding: 10px;
+    background-color: rgba(33,37,41,255)
+}
+
+.img-4 {
+    width:600px;
+    height: 100px;
+    border-radius: 20px ;
+    margin: 5px;
+    transition: 5.ms;
+}
+
+.img-2 {
+    margin: 5px;
+    width: 120px;
+    height: 110px;
+}
+.img-2:hover{
+    border: 1px solid red;
+}
