@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tmdblistviewtraining/detailscreen.dart';
 import 'package:tmdblistviewtraining/helper.dart';
 import 'package:tmdblistviewtraining/search.dart';
 
-enum MovieCategory { latest, nowPlaying, popular, topRated, upcoming }
+enum MovieCategory { latest, nowPlaying, popular, topRated, upcoming, horror, romance, comedy }
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -58,6 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
           return 'Top Rated';
         case MovieCategory.upcoming:
           return 'Up Coming';
+        case MovieCategory.horror:
+          return 'Horror';
+        case MovieCategory.romance:
+          return 'Romance';
+        case MovieCategory.comedy:
+          return 'Comedy';
         default:
           return '';
       }
@@ -103,6 +107,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     const PopupMenuItem(
                       value: MovieCategory.upcoming,
                       child: Text('Up Coming'),
+                    ),
+                    const PopupMenuItem(
+                      value: MovieCategory.horror,
+                      child: Text('Horror'),
+                    ),
+                    const PopupMenuItem(
+                      value: MovieCategory.romance,
+                      child: Text('Romance'),
+                    ),
+                    const PopupMenuItem(
+                      value: MovieCategory.comedy,
+                      child: Text('Comedy'),
                     ),
                   ]),
         ],
