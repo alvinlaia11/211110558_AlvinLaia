@@ -30,12 +30,31 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String selectedGenre = 'All'; // Default selected genre
+
   @override
   Widget build(BuildContext context) {
     NetworkImage image;
     return Scaffold(
       appBar: AppBar(
         title: Text('Now Playing'),
+        actions: <Widget>[
+          DropdownButton<String>(
+            value: selectedGenre,
+            items: <String>['All', 'Horror', 'Romantis', 'Comedy']
+                .map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedGenre = newValue!;
+              });
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: (movies?.length == null) ? 0 : movies?.length,
@@ -45,25 +64,31 @@ class _HomeScreenState extends State<HomeScreen> {
           } else {
             image = NetworkImage(defaultImage);
           }
-          return Card(
-            color: Colors.white,
-            elevation: 2.0,
-            child: ListTile(
-              onTap: () {
-                MaterialPageRoute route = MaterialPageRoute(
-                    builder: (_) => DetailScreen(movies![position]));
-                Navigator.push(context, route);
-              },
-              leading: CircleAvatar(
-                backgroundImage: image,
+
+          // Add logic to filter movies by selected genre
+          if (selectedGenre == 'All' || movies![position].genre == selectedGenre) {
+            return Card(
+              color: Colors.white,
+              elevation: 2.0,
+              child: ListTile(
+                onTap: () {
+                  MaterialPageRoute route = MaterialPageRoute(
+                      builder: (_) => DetailScreen(movies![position]));
+                  Navigator.push(context, route);
+                },
+                leading: CircleAvatar(
+                  backgroundImage: image,
+                ),
+                title: Text(movies![position].title),
+                subtitle: Text('Released: ' +
+                    movies![position].releaseDate +
+                    ' - Vote: ' +
+                    movies![position].voteAverage.toString()),
               ),
-              title: Text(movies![position].title),
-              subtitle: Text('Released: ' +
-                  movies![position].releaseDate +
-                  ' - Vote: ' +
-                  movies![position].voteAverage.toString()),
-            ),
-          );
+            );
+          } else {
+            return SizedBox.shrink();
+          }
         },
       ),
     );
