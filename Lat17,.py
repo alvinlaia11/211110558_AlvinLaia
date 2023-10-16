@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:tmdblistviewtraining/screen.dart';
 
@@ -32,29 +31,25 @@ class HttpHelper {
   final String _urlBase = "https://api.themoviedb.org/";
 
   Stream<List?> getMovies(MovieCategory category) async* {
-    String categoryStr;
+    String? categoryStr; // Menggunakan categoryStr sebagai nullable
     switch (category) {
       case MovieCategory.latest:
         categoryStr = 'upcoming'; //latest but error 401 api
         break;
-
       case MovieCategory.nowPlaying:
         categoryStr = 'now_playing';
         break;
-
       case MovieCategory.popular:
         categoryStr = 'popular';
         break;
-
       case MovieCategory.topRated:
         categoryStr = 'top_rated';
         break;
-
       case MovieCategory.upcoming:
         categoryStr = 'upcoming';
         break;
     }
-    var url = Uri.parse(_urlBase + '/3/movie/' + categoryStr + _urlKey);
+    var url = Uri.parse(_urlBase + '/3/movie/' + categoryStr! + _urlKey);
     http.Response result = await http.get(url);
     if (result.statusCode == HttpStatus.ok) {
       final jsonResponse = json.decode(result.body);
@@ -68,25 +63,3 @@ class HttpHelper {
     }
   }
 }
-
-[{
-	"resource": "/d:/211110558_Alvin/Test Lib/basic/lib/helper.dart",
-	"owner": "_generated_diagnostic_collection_name_#0",
-	"code": {
-		"value": "not_assigned_potentially_non_nullable_local_variable",
-		"target": {
-			"$mid": 1,
-			"external": "https://dart.dev/diagnostics/not_assigned_potentially_non_nullable_local_variable",
-			"path": "/diagnostics/not_assigned_potentially_non_nullable_local_variable",
-			"scheme": "https",
-			"authority": "dart.dev"
-		}
-	},
-	"severity": 8,
-	"message": "The non-nullable local variable 'categoryStr' must be assigned before it can be used.\nTry giving it an initializer expression, or ensure that it's assigned on every execution path.",
-	"source": "dart",
-	"startLineNumber": 57,
-	"startColumn": 50,
-	"endLineNumber": 57,
-	"endColumn": 61
-}]
