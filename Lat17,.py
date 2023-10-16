@@ -58,9 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return 'Top Rated';
         case MovieCategory.upcoming:
           return 'Up Coming';
-        default:
-          return '';
       }
+      return '';
     }
 
     return Scaffold(
@@ -75,86 +74,81 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             icon: Icon(Icons.search),
           ),
-          PopupMenuButton<MovieCategory>(
-              onSelected: (MovieCategory result) {
+        ],
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            DropdownButton<MovieCategory>(
+              value: _selectedCategory,
+              onChanged: (MovieCategory newValue) {
                 setState(() {
-                  _selectedCategory = result;
+                  _selectedCategory = newValue;
                   initialize();
                 });
               },
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<MovieCategory>>[
-                    const PopupMenuItem(
-                      value: MovieCategory.latest,
-                      child: Text('Latest'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.nowPlaying,
-                      child: Text('Now Playing'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.popular,
-                      child: Text('Popular'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.topRated,
-                      child: Text('Top Rated'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.upcoming,
-                      child: Text('Up Coming'),
-                    ),
-                  ]),
-        ],
-      ),
-      body: StreamBuilder<List?>(
-        stream: streamController.stream,
-        builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data?.length ?? 0,
-                  itemBuilder: (BuildContext context, int position) {
-                    ImageProvider image;
-                    if (snapshot.data![position].posterPath != null) {
-                      image = NetworkImage(
-                          iconBase + snapshot.data![position].posterPath);
-                    } else {
-                      image = NetworkImage(defaultImage);
-                    }
-                    return Card(
-                      color: Colors.white,
-                      elevation: 2.0,
-                      child: ListTile(
-                        onTap: () {
-                          MaterialPageRoute route = MaterialPageRoute(
-                              builder: (_) =>
-                                  DetailScreen(snapshot.data![position]));
-                          Navigator.push(context, route);
-                        },
-                        leading: CircleAvatar(
-                          backgroundImage: image,
-                        ),
-                        title: Text(snapshot.data![position].title),
-                        subtitle: Text('Released: ' +
-                            snapshot.data![position].releaseDate +
-                            ' - Vote: ' +
-                            snapshot.data![position].voteAverage.toString()),
-                      ),
+              items: MovieCategory.values
+                  .map((category) {
+                    return DropdownMenuItem<MovieCategory>(
+                      value: category,
+                      child: Text(getAppBarTitle(category)),
                     );
-                  },
-                );
-              } else {
-                return Text('No data');
-              }
-          }
-        },
+                  })
+                  .toList(),
+            ),
+            StreamBuilder<List?>(
+              stream: streamController.stream,
+              builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return CircularProgressIndicator();
+                  default:
+                    if (snapshot.hasData) {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data?.length ?? 0,
+                          itemBuilder: (BuildContext context, int position) {
+                            ImageProvider image;
+                            if (snapshot.data![position].posterPath != null) {
+                              image = NetworkImage(
+                                  iconBase + snapshot.data![position].posterPath);
+                            } else {
+                              image = NetworkImage(defaultImage);
+                            }
+                            return Card(
+                              color: Colors.white,
+                              elevation: 2.0,
+                              child: ListTile(
+                                onTap: () {
+                                  MaterialPageRoute route = MaterialPageRoute(
+                                      builder: (_) =>
+                                          DetailScreen(snapshot.data![position]));
+                                  Navigator.push(context, route);
+                                },
+                                leading: CircleAvatar(
+                                  backgroundImage: image,
+                                ),
+                                title: Text(snapshot.data![position].title),
+                                subtitle: Text('Released: ' +
+                                    snapshot.data![position].releaseDate +
+                                    ' - Vote: ' +
+                                    snapshot.data![position].voteAverage.toString()),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return Text('No data');
+                    }
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
