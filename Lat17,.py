@@ -1,177 +1,92 @@
-import 'package:flutter/material.dart';
-import 'package:tmdblistviewtraining/detailscreen.dart';
-import 'package:tmdblistviewtraining/helper.dart';
-import 'package:tmdblistviewtraining/search.dart';
+import 'dart:convert';
+import 'dart:io';
 
-enum MovieCategory { latest, nowPlaying, popular, topRated, upcoming, horror, romance, comedy }
+import 'package:http/http.dart' as http;
+import 'package:tmdblistviewtraining/screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class Movie {
+  final int id;
+  final String title;
+  final double voteAverage;
+  final String releaseDate;
+  final String overview;
+  final String posterPath;
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Movie(this.id, this.title, this.voteAverage, this.releaseDate, this.overview,
+      this.posterPath);
+
+  factory Movie.fromJson(Map<String, dynamic> parsedJson) {
+    final id = parsedJson['id'] as int;
+    final title = parsedJson['title'] as String;
+    final voteAverage = parsedJson['vote_average'] * 1.0 as double;
+    final releaseDate = parsedJson['release_date'] as String;
+    final overview = parsedJson['overview'] as String;
+    final posterPath = parsedJson['poster_path'] as String;
+
+    return Movie(id, title, voteAverage, releaseDate, overview, posterPath);
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  MovieCategory _selectedCategory = MovieCategory.nowPlaying;
-  StreamController<List?> streamController = StreamController<List?>();
+class HttpHelper {
+  final String _urlKey = "?api_key=fd32ea8d9e92f032a1073ac1418330b9";
+  final String _urlBase = "https://api.themoviedb.org/";
 
-  HttpHelper? helper;
-  List? movies;
-  final String iconBase = 'https://image.tmdb.org/t/p/w92/';
-  final String defaultImage =
-      'https://images.freeimages.com/images/large-previews/5eb/movie-clapboard-1184339.jpg';
+  Stream<List?> getMovies(MovieCategory category) async* {
+    String categoryStr;
+    switch (category) {
+      case MovieCategory.latest:
+        categoryStr = 'upcoming'; //latest but error 401 api
+        break;
 
-  void initialize() {
-    helper?.getMovies(_selectedCategory).listen((movies) {
-      streamController.add(movies);
-    });
-  }
+      case MovieCategory.nowPlaying:
+        categoryStr = 'now_playing';
+        break;
 
-  @override
-  void initState() {
-    helper = HttpHelper();
-    Timer.periodic(Duration(seconds: 5), (Timer t) => initialize());
-    super.initState();
-  }
+      case MovieCategory.popular:
+        categoryStr = 'popular';
+        break;
 
-  @override
-  void dispose() {
-    streamController.close();
-    super.dispose();
-  }
+      case MovieCategory.topRated:
+        categoryStr = 'top_rated';
+        break;
 
-  @override
-  Widget build(BuildContext context) {
-    NetworkImage image;
-    String getAppBarTitle(MovieCategory category) {
-      switch (category) {
-        case MovieCategory.latest:
-          return 'Latest';
-        case MovieCategory.nowPlaying:
-          return 'Now Playing';
-        case MovieCategory.popular:
-          return 'Popular';
-        case MovieCategory.topRated:
-          return 'Top Rated';
-        case MovieCategory.upcoming:
-          return 'Up Coming';
-        case MovieCategory.horror:
-          return 'Horror';
-        case MovieCategory.romance:
-          return 'Romance';
-        case MovieCategory.comedy:
-          return 'Comedy';
-        default:
-          return '';
-      }
+      case MovieCategory.upcoming:
+        categoryStr = 'upcoming';
+        break;
     }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(getAppBarTitle(_selectedCategory)),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              MaterialPageRoute route =
-                  MaterialPageRoute(builder: (_) => const SearchMovie());
-              Navigator.push(context, route);
-            },
-            icon: Icon(Icons.search),
-          ),
-          PopupMenuButton<MovieCategory>(
-              onSelected: (MovieCategory result) {
-                setState(() {
-                  _selectedCategory = result;
-                  initialize();
-                });
-              },
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<MovieCategory>>[
-                    const PopupMenuItem(
-                      value: MovieCategory.latest,
-                      child: Text('Latest'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.nowPlaying,
-                      child: Text('Now Playing'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.popular,
-                      child: Text('Popular'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.topRated,
-                      child: Text('Top Rated'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.upcoming,
-                      child: Text('Up Coming'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.horror,
-                      child: Text('Horror'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.romance,
-                      child: Text('Romance'),
-                    ),
-                    const PopupMenuItem(
-                      value: MovieCategory.comedy,
-                      child: Text('Comedy'),
-                    ),
-                  ]),
-        ],
-      ),
-      body: StreamBuilder<List?>(
-        stream: streamController.stream,
-        builder: (BuildContext context, AsyncSnapshot<List?> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data?.length ?? 0,
-                  itemBuilder: (BuildContext context, int position) {
-                    ImageProvider image;
-                    if (snapshot.data![position].posterPath != null) {
-                      image = NetworkImage(
-                          iconBase + snapshot.data![position].posterPath);
-                    } else {
-                      image = NetworkImage(defaultImage);
-                    }
-                    return Card(
-                      color: Colors.white,
-                      elevation: 2.0,
-                      child: ListTile(
-                        onTap: () {
-                          MaterialPageRoute route = MaterialPageRoute(
-                              builder: (_) =>
-                                  DetailScreen(snapshot.data![position]));
-                          Navigator.push(context, route);
-                        },
-                        leading: CircleAvatar(
-                          backgroundImage: image,
-                        ),
-                        title: Text(snapshot.data![position].title),
-                        subtitle: Text('Released: ' +
-                            snapshot.data![position].releaseDate +
-                            ' - Vote: ' +
-                            snapshot.data![position].voteAverage.toString()),
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return Text('No data');
-              }
-          }
-        },
-      ),
-    );
+    var url = Uri.parse(_urlBase + '/3/movie/' + categoryStr + _urlKey);
+    http.Response result = await http.get(url);
+    if (result.statusCode == HttpStatus.ok) {
+      final jsonResponse = json.decode(result.body);
+      final moviesMap = jsonResponse['results'];
+      List movies = moviesMap.map((i) => Movie.fromJson(i)).toList();
+      yield movies;
+    } else if (result.statusCode == HttpStatus.unauthorized) {
+      throw Exception('API Telah Mengalami Masalah Silahkan cek kembali');
+    } else {
+      yield null;
+    }
   }
 }
+
+[{
+	"resource": "/d:/211110558_Alvin/Test Lib/basic/lib/helper.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "not_assigned_potentially_non_nullable_local_variable",
+		"target": {
+			"$mid": 1,
+			"external": "https://dart.dev/diagnostics/not_assigned_potentially_non_nullable_local_variable",
+			"path": "/diagnostics/not_assigned_potentially_non_nullable_local_variable",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The non-nullable local variable 'categoryStr' must be assigned before it can be used.\nTry giving it an initializer expression, or ensure that it's assigned on every execution path.",
+	"source": "dart",
+	"startLineNumber": 57,
+	"startColumn": 50,
+	"endLineNumber": 57,
+	"endColumn": 61
+}]
