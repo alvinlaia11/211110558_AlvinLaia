@@ -1,81 +1,71 @@
-from abc import ABC, abstractmethod
+import 'package:flutter/material.dart';
+import 'package:basic/components/htpHelper.dart';
+import 'package:basic/components/detail.dart';
 
-class Mahasiswa(ABC):
-    @abstractmethod
-    def cetakMhs():
-        pass
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
-class Dosen(ABC):
-    @abstractmethod
-    def cetakDosen():
-        pass
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
-class CetakNama(Mahasiswa):
-    def cetakMhs(Data):
-        print(f"Nama Mahasiswa : {Data.nama}")
+class _HomeScreenState extends State<HomeScreen> {
+  HttpHelper? helper;
+  List? movies;
+  final String iconBase = 'https://image.tmdb.org/t/p/w92/';
+  final String defaultImage =
+      'https://images.freeimages.com/images/large-previews/5eb/movieclapboard-1184339.jpg';
 
-class CetakNama(Dosen):   
-    def cetakDosen(Data):
-        print(f"Nama Dosen : {Data.nama}")
+  @override
+  void initState() {
+    super.initState();
+    helper = HttpHelper();
+    initialize();
+  }
 
-class CetakNim(Mahasiswa):
-    def cetakMhs(Data):
-        print(f"Nim Mahasiswa : {Data.nim}")
+  Future initialize() async {
+    movies = await helper?.getMovies();
+    setState(() {
+      movies = movies;
+    });
+  }
 
-class CetakNip(Dosen):
-    def cetakDosen(Data):
-        print(f"Nip Dosen  : {Data.nip}")
-
-class CetakKelas(Mahasiswa):
-    def cetakMhs(Data):
-        print(f"Kelas Mahasiswa : {Data.kelas}")
-
-class CetakJabatan(Dosen):
-    def cetakDosen(Data):
-        print(f"Jabatan Sebagai  :  {Data.jabatan}")
-
-class CetakNoHp(Mahasiswa):
-    def cetakMhs(Data):
-        print(f"Nomor Hp Mahasiswa : {Data.noHp}")
-
-class CetakNoHpDosen(Dosen): 
-    def cetakDosen(Data):
-        print(f"Nomor Hp Dosen : {Data.noHp}")
-
-class DataMahasiswa:
-    def __init__(self, nama, nim, kelas, noHp):
-        self.nama = nama
-        self.nim  = nim
-        self.kelas = kelas
-        self.noHp = noHp
-
-
-class DataDosen:
-    def __init__(self, nama, nip, jabatan, noHp):
-        self.nama = nama
-        self.nip = nip
-        self.jabatan = jabatan
-        self.noHp = noHp
-
-if __name__ == "__main__":
-    b = []
-    data1 = DataMahasiswa("Alvin","211110558","IF-C Pagi","081375269852")
-    data2 = DataDosen("Albert","132211","Dosen Tetap","0882015035158")
-    b.append(data1)
-    b.append(data2)
-    
-    for data in b:
-        for proses in Mahasiswa.__subclasses__():
-            try:
-                proses.cetakMhs(data)
-            except:
-                continue
-        print()
-        
-    # print(len(b))
-    
-    
-
-
-
-
+  @override
+  Widget build(BuildContext context) {
+    NetworkImage image;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Now Playing'),
+      ),
+      body: ListView.builder(
+        itemCount: (movies?.length == null) ? 0 : movies?.length,
+        itemBuilder: (BuildContext context, int position) {
+          if (movies![position].posterPath != null) {
+            image = NetworkImage(iconBase + movies![position].posterPath);
+          } else {
+            image = NetworkImage(defaultImage);
+          }
+          return Card(
+            color: Colors.white,
+            elevation: 2.0,
+            child: ListTile(
+              onTap: () {
+                MaterialPageRoute route = MaterialPageRoute(
+                    builder: (_) => DetailScreen(movies![position]));
+                Navigator.push(context, route);
+              },
+              leading: CircleAvatar(
+                backgroundImage: image,
+              ),
+              title: Text(movies![position].title),
+              subtitle: Text('Released: ' +
+                  movies![position].releaseDate +
+                  ' - Vote: ' +
+                  movies![position].voteAverage.toString()),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
